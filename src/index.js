@@ -11,7 +11,7 @@ const init = () => {
 
   scene = new Scene();
 
-  camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 10000);
+  camera = new PerspectiveCamera(65, window.innerWidth / window.innerHeight, 1, 10000);
   camera.position.z = 1000;
 
   geometry = new BoxGeometry(200, 200, 200);
