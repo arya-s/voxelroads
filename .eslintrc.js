@@ -24,5 +24,8 @@ module.exports = {
             "error",
             "always"
         ]
+    },
+    "globals": {
+        "Stats": true
     }
 };

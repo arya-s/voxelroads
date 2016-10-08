@@ -3,9 +3,14 @@ import {
   Mesh, MeshBasicMaterial, WebGLRenderer
 } from 'three';
 
+var container = document.querySelector('#content');
 
 var scene, camera, renderer;
 var geometry, material, mesh;
+
+var stats = new Stats();
+container.appendChild(stats.dom);
+
 
 const init = () => {
 
@@ -23,7 +28,7 @@ const init = () => {
   renderer = new WebGLRenderer();
   renderer.setSize(window.innerWidth, window.innerHeight);
 
-  document.querySelector('#content').appendChild(renderer.domElement);
+  container.appendChild(renderer.domElement);
 
 };
 
@@ -35,6 +40,8 @@ const run = () => {
   mesh.rotation.y += 0.02;
 
   renderer.render(scene, camera);
+
+  stats.update();
 
 };
 
