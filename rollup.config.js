@@ -6,9 +6,6 @@ export default {
   dest: 'bin/js/bundle.js',
   format: 'iife',
   sourceMap: 'inline',
-  globals: {
-    three: 'THREE'
-  },
   plugins: [
     babel({
       exclude: 'node_modules/**',
