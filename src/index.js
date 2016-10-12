@@ -1,5 +1,6 @@
-var element = document.querySelector('#content');
+import OBJModel from './components/OBJModel/index.js';
 
+var element = document.querySelector('#content');
 var pointerlockchange = () => {
 
   if (document.pointerLockElement === element ||
@@ -79,26 +80,14 @@ let init = () => {
   directionalLight.position.set(1, 1, 0).normalize();
   scene.add(directionalLight);
 
-  let mtlLoader = new THREE.MTLLoader();
-  mtlLoader.setPath('assets/models/');
-  mtlLoader.load('ship.mtl', (materials) => {
+  let shipmodel = new OBJModel('assets/models/ship.obj', 'assets/models/ship.mtl');
+  shipmodel.load(ship => {
 
-    materials.preload();
-
-    let objLoader = new THREE.OBJLoader();
-
-    objLoader.setMaterials(materials);
-    objLoader.setPath('assets/models/');
-
-    objLoader.load('ship.obj', (ship) => {
-
-      ship.scale.set(40, 40, 40);
-      ship.position.set(20, -120, 50);
-      ship.rotation.y = -Math.PI / 2;
-      scene.add(ship);
-
-    });
-
+    ship.scale.set(40, 40, 40);
+    ship.position.set(20, -120, 50);
+    ship.rotation.y = -Math.PI / 2;
+    scene.add(ship); 
+      
   });
 
   renderer = new THREE.WebGLRenderer();
