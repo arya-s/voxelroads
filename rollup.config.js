@@ -7,13 +7,13 @@ export default {
   format: 'iife',
   sourceMap: 'inline',
   plugins: [
-    babel({
-      exclude: 'node_modules/**',
-    }),
     eslint({
       exclude: [
         'bin/'
       ]
+    }),
+    babel({
+      exclude: 'node_modules/**',
     })
   ],
 };

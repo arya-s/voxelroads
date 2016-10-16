@@ -1,7 +1,7 @@
 let objLoader = new THREE.OBJLoader();
 let mtlLoader = new THREE.MTLLoader();
 
-export default class OBJModel {
+class OBJModel {
 
   constructor(obj, mtl=null) {
 
@@ -38,3 +38,5 @@ export default class OBJModel {
   }
 
 }
+
+export default OBJModel;

@@ -1,83 +1,33 @@
 import OBJModel from './components/OBJModel/index.js';
+import Skybox from './components/Skybox/index.js';
+import Camera from './components/Camera/index.js';
+import PointerLock from './components/PointerLock/index.js';
 
-var element = document.querySelector('#content');
-var pointerlockchange = () => {
-
-  if (document.pointerLockElement === element ||
-      document.mozPointerLockElement === element ||
-      document.webkitPointerLockElement === element) {
-    controls.enabled = true;
-  } else {
-    controls.enabled = false;
-  }
-
-};
-
-document.addEventListener('pointerlockchange', pointerlockchange, false);
-document.addEventListener('mozpointerlockchange', pointerlockchange, false);
-document.addEventListener('webkitpointerlockchange', pointerlockchange, false);
-
-element.addEventListener('click', () => {
-
-  element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
-
-  if (/Firefox/i.test(navigator.userAgent)) {
-
-    var fullscreenchange = () => {
-
-      if (document.fullscreenElement === element ||
-          document.mozFullscreenElement === element ||
-          document.mozFullScreenElement === element) {
-
-        document.removeEventListener('fullscreenchange', fullscreenchange);
-        document.removeEventListener('mozfullscreenchange', fullscreenchange);
-        element.requestPointerLock();
-
-      }
-
-    };
-
-    document.addEventListener('fullscreenchange', fullscreenchange, false);
-    document.addEventListener('mozfullscreenchange', fullscreenchange, false);
-
-  } else {
-
-    element.requestPointerLock();
-
-  }
-
-}, false);
-
-var camera, controls, renderer, scene, stats;
+let renderOn = document.querySelector('#content');
+let camera, controls, renderer, scene, stats;
 
 let init = () => {
 
-  let textureLoader = new THREE.CubeTextureLoader();
-  textureLoader.setPath('assets/textures/');
+  stats = new Stats();
+  renderer = new THREE.WebGLRenderer();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderOn.appendChild(renderer.domElement);
+  renderOn.appendChild(stats.dom);
 
-  let skyCube = textureLoader.load([
-    'sky_px.png', 'sky_nx.png',
-    'sky_py.png', 'sky_ny.png',
-    'sky_pz.png', 'sky_nz.png'
-  ]);
-
-  scene = new THREE.Scene();
-  scene.background = skyCube;
-
-  scene.add(new THREE.AxisHelper(1000));
-
-  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
-  camera.position.set(0, 400, 1200);
-  camera.lookAt(0, 0, 0);
-
+  camera = Camera.init();
   controls = new THREE.PointerLockControls(camera);
-  scene.add(controls.getObject());
+  PointerLock.init(renderOn, controls);
 
   let ambient = new THREE.AmbientLight(0x444444);
-  scene.add(ambient);
-
   let directionalLight = new THREE.DirectionalLight(0xffeedd);
   directionalLight.position.set(1, 1, 0).normalize();
+
+  scene = new THREE.Scene();
+  scene.background = Skybox.init();
+
+  scene.add(new THREE.AxisHelper(1000));
+  scene.add(controls.getObject());
+  scene.add(ambient);
   scene.add(directionalLight);
 
   let shipmodel = new OBJModel('assets/models/ship.obj', 'assets/models/ship.mtl');
@@ -89,14 +39,6 @@ let init = () => {
     scene.add(ship); 
       
   });
-
-  renderer = new THREE.WebGLRenderer();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-
-  stats = new Stats();
-
-  element.appendChild(renderer.domElement);
-  element.appendChild(stats.dom);
 
 };
 
